@@ -1,18 +1,20 @@
 # Sitio web Fundación Enciende una Luz (ENCILUZ) — Diseño
 
-Fecha: 2026-09-24 · Estado: aprobado en conversación, pendiente revisión escrita
+Fecha: 2026-09-24 · Revisión 2 (el cliente pidió WordPress completo con todo el contenido administrable)
 
 ## 1. Objetivo
 
 Sitio institucional para la Fundación de Bienestar Social Enciende una Luz (ENCILUZ, RIF J-29721263-9),
-inspirado en la estructura de https://www.fundana.org/quiénes-somos, **administrable por el cliente**
-desde WordPress, publicado en **Vercel** para revisión continua, y con **seguridad preparada para auditoría**.
+inspirado en la estructura de https://www.fundana.org/quiénes-somos, **hecho en WordPress con todo el
+contenido administrable** (textos, imágenes, secciones, orden, menús, cabecera, pie y páginas nuevas),
+con una **vista previa en Vercel** para el cliente y **seguridad preparada para auditoría**.
+Producción final: WordPress en GoDaddy.
 
 Criterios de éxito:
-- El cliente edita textos, imágenes, programas, equipo, aliados y documentos sin tocar código.
-- Cada guardado en WordPress se refleja en Vercel en segundos (sin redeploy manual).
-- El sitio funciona en Vercel aunque WordPress no esté disponible (contenido de respaldo).
-- Cabeceras de seguridad con calificación A en securityheaders.com; WordPress endurecido.
+- El cliente edita cualquier parte del sitio con el editor de bloques (Gutenberg), sin código ni page builders.
+- Secciones prearmadas (patrones) con la paleta, para crear páginas nuevas coherentes.
+- Vista previa estática en Vercel, actualizable con un comando.
+- WordPress endurecido con pruebas de seguridad automatizadas; `SECURITY.md` para el auditor.
 - Accesible (WCAG 2.1 AA) y correcto en móvil.
 
 Fuentes: `Briefing (1) (1).pdf`, `Logo completo.png`, paleta (WhatsApp 2026-09-24).
@@ -20,82 +22,73 @@ Fuentes: `Briefing (1) (1).pdf`, `Logo completo.png`, paleta (WhatsApp 2026-09-2
 ## 2. Arquitectura
 
 ```
-wp-admin (Docker local → GoDaddy en cms.enciluz.com)
-   │ REST API solo lectura (endpoint propio /wp-json/enciluz/v1/*)
-   ▼
-Next.js (App Router, SSG + ISR) en Vercel → enciluz.com
-   └─ /web/content/fallback.json si WP no responde o WP_API_URL no está definida
+WordPress 6 (Docker local → GoDaddy)
+  ├─ tema de bloques "enciluz" (theme.json, plantillas, partes, patrones)
+  ├─ mu-plugin "enciluz-core" (endurecimiento, cabeceras, formulario de contacto)
+  └─ plugins de seguridad: Two Factor, WPS Hide Login, Limit Login Attempts Reloaded
+        │
+        └─ export estático (wget mirror) ──▶ Vercel (vista previa del cliente, con cabeceras de seguridad)
 ```
 
-Monorepo:
-- `/cms` — `docker-compose.yml` (WordPress + MariaDB), mu-plugin `enciluz-core` (CPTs, campos,
-  endpoint agregado, endurecimiento, webhook de revalidación), script `seed` con el contenido del briefing.
-- `/web` — Next.js + TypeScript + CSS Modules (sin framework CSS pesado).
+Repositorio:
+- `/cms/docker-compose.yml` — WordPress (`wordpress:php8.3-apache`) + MariaDB 11 + wp-cli; puerto solo en 127.0.0.1.
+- `/cms/theme/enciluz/` — tema de bloques (montado en `wp-content/themes/enciluz`).
+- `/cms/mu-plugins/` — `enciluz-core.php` y módulos.
+- `/cms/seed/` — `content.json` (contenido del briefing) e imágenes libres; `scripts/seed.php` crea páginas,
+  menú y biblioteca de medios a partir de los patrones.
+- `/cms/scripts/` — `setup.sh` (instalación), `export.sh` (sitio estático → `/preview`), `deploy-preview.sh`.
+- `/preview/` — salida estática + `vercel.json` con cabeceras (lo que se publica en Vercel).
 
-Flujo de datos: `web/lib/content.ts` intenta `WP_API_URL/wp-json/enciluz/v1/site` (timeout 5 s);
-si falla, usa `fallback.json`. Mismo esquema en ambos (tipos en `web/lib/types.ts`).
-Revalidación: WP `save_post` → POST a `/api/revalidate` en Vercel con `REVALIDATE_SECRET`.
+## 3. Modelo de contenido (todo editable)
 
-Migración a GoDaddy: subir WP (plugin/export estándar), definir `WP_API_URL` y `REVALIDATE_SECRET`
-en Vercel. Sin cambios de código.
-
-## 3. Modelo de contenido (editable)
-
-Campos registrados en código nativo de WordPress (meta boxes + Settings API en el mu-plugin; **sin ACF**,
-porque ACF gratuito no tiene páginas de opciones ni repetidores y así hay un plugin menos que auditar):
-- **Ajustes del sitio** (menú "Ajustes ENCILUZ"): teléfonos, correo general, dirección, redes, RIF,
-  título/subtítulo del hero, imagen hero, 4 cifras de impacto fijas (valor + etiqueta).
-- **Programa** (CPT): título, imagen destacada, resumen, descripción, estados, cifra destacada, orden.
-- **Sector** (CPT): título, ícono, descripción, orden.
-- **Miembro del equipo** (CPT): nombre, cargo, foto opcional, orden. Sin correos personales.
-- **Aliado** (CPT): nombre, logo, URL, tipo (donante/red).
-- **Documento** (CPT): título, PDF adjunto, categoría (protocolo/manual/código).
-- **Páginas** estándar con Gutenberg para "Historia" y textos libres.
+- Todas las páginas son páginas normales de WordPress compuestas con bloques nativos y patrones.
+- Cabecera y pie son *template parts* editables en el Editor del sitio (Apariencia → Editor).
+- Menú con el bloque Navegación nativo.
+- Patrones del tema (categoría "ENCILUZ"): Hero, Cifras de impacto, Sectores, Tarjetas de programa,
+  Valores, Equipo, Aliados/Donantes, Documentos de transparencia, Cobertura, Llamado a colaborar, Datos de contacto.
+- El cliente usa el rol **Editor** (edita contenido y páginas). La edición de plantillas, cabecera y pie
+  requiere Administrador; se entrega una cuenta de administrador aparte, con 2FA.
 
 Solo se publica el correo general `fundacionenciluz@gmail.com`.
 
 ## 4. Páginas
 
 1. **Inicio** — hero con misión, cifras (15.733 atenciones de salud 2025, 312 mujeres fortalecidas,
-   8 estados, desde 2008), sectores, programas destacados, aliados, llamada a colaborar.
+   8 estados, desde 2008), sectores, programas destacados, aliados, llamado a colaborar.
 2. **Quiénes somos** — historia, identidad (ONG nacional basada en fe, liderada por mujeres, enfoque
    comunitario, especialista en protección), valores, equipo, redes (PEAS, Igualdad de Género, CAFI, OBF), aliados.
 3. **Qué hacemos** — 6 sectores, 9 programas, cobertura por estado/municipio/etnia.
-4. **Transparencia** — protocolos y manuales, PEAS/salvaguardas, canal de denuncias (correo de reclamos
-   solo si el cliente lo autoriza; por defecto formulario).
-5. **Contacto / Colabora** — datos, WhatsApp, mapa (enlace, sin iframe de terceros), formulario.
+4. **Transparencia** — protocolos y manuales, PEAS/salvaguardas, canal de denuncias.
+5. **Contacto / Colabora** — datos, WhatsApp, enlace a mapa (sin iframe), formulario.
 
 ## 5. Diseño visual
 
 Paleta: `#3ba7bf` primario, `#f2cf1d` / `#f2a922` acentos (llama), `#73541a` titulares, `#0d0d0d` texto,
-`#ffffff` fondo; neutro cálido derivado para secciones. Texto sobre amarillo/naranja siempre en `#0d0d0d`
-(contraste AA). Tipografía humanista autoalojada (next/font). Fotos libres de derechos
-(Unsplash/Pexels) descargadas al repo, con crédito en `web/public/images/CREDITS.md`.
+`#ffffff` fondo; derivados `#1f5f6d` (azul oscuro para texto AA) y `#fbf7ee` (crema). Texto sobre
+amarillo/naranja siempre `#0d0d0d`. Tipografías Nunito / Nunito Sans autoalojadas en el tema.
+Fotos libres (Unsplash/Pexels) con créditos en `cms/seed/images/CREDITS.md`.
 
 ## 6. Seguridad
 
-Front (Vercel):
-- CSP estricta, HSTS, X-Frame-Options DENY, X-Content-Type-Options, Referrer-Policy,
-  Permissions-Policy (en `next.config`).
-- Sin scripts de terceros; fuentes e imágenes propias.
-- `/api/contact`: validación de esquema, honeypot, límite de tamaño, rate limit básico por IP,
-  envío por Resend (clave en env); no almacena datos personales.
-- `/api/revalidate`: secreto comparado en tiempo constante.
+WordPress (mu-plugin + configuración):
+- XML-RPC off; `wp/v2/users` y REST para anónimos bloqueados (salvo lo que usa el editor autenticado);
+  enumeración `?author=` → 404; sin versión en cabeceras/HTML; `DISALLOW_FILE_EDIT`; subida limitada a
+  jpg/png/webp/pdf; Editor sin `unfiltered_html`; login en URL oculta; 2FA; límite de intentos.
+- Cabeceras: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS (en HTTPS).
+- Formulario de contacto propio (sin plugin): nonce, honeypot, tiempo mínimo, límite por IP (transients),
+  validación y protección contra inyección de cabeceras; se envía con `wp_mail`, no guarda datos personales.
+- Sin scripts ni iframes de terceros; fuentes locales.
 
-WordPress:
-- XML-RPC off, endpoint `wp/v2/users` bloqueado a anónimos, `DISALLOW_FILE_EDIT`, front público
-  redirigido (solo API), login oculto (WPS Hide Login), 2FA (plugin Two Factor), límite de intentos,
-  cliente con rol Editor, claves/sales únicas en env, sin exponer versión.
-- `SECURITY.md` con checklist para el auditor.
+Vista previa en Vercel: HTML estático, sin PHP ni base de datos; `vercel.json` con las mismas cabeceras.
+El formulario en la vista previa no envía (se indica al visitante que use correo/WhatsApp).
 
 ## 7. Proceso y verificación
 
-- Subagente "experto en ONGs" redacta textos desde el briefing; subagente "experto UX" revisa
+- Subagente "experto en ONGs" redacta los textos desde el briefing; subagente "experto UX" revisa
   navegación, accesibilidad y móvil.
-- Verificación: `next build` sin errores, prueba del fallback sin WP, prueba con WP en Docker,
-  revisión de cabeceras, Lighthouse (accesibilidad ≥ 95), revisión de seguridad final.
-- Despliegue: Vercel preview para el cliente.
+- Pruebas de seguridad automatizadas (`cms/tests/security.sh`) y del formulario (`cms/tests/contact.sh`).
+- Lighthouse (accesibilidad ≥ 95) sobre la vista previa.
 
 ## Fuera de alcance
 
-Pasarela de donaciones en línea, multilenguaje, blog/noticias (se puede añadir luego como CPT).
+Pasarela de donaciones en línea, multilenguaje, blog (WordPress lo trae; se activa cuando el cliente lo pida).
