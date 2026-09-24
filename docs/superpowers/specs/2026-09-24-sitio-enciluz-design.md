@@ -41,9 +41,10 @@ en Vercel. Sin cambios de código.
 
 ## 3. Modelo de contenido (editable)
 
-Campos registrados en código (mu-plugin, sin ACF Pro; se usa ACF gratuito o meta boxes nativos):
-- **Ajustes del sitio** (página de opciones): teléfonos, correo general, dirección, redes, RIF,
-  título/subtítulo del hero, imagen hero, cifras de impacto (valor + etiqueta, repetible).
+Campos registrados en código nativo de WordPress (meta boxes + Settings API en el mu-plugin; **sin ACF**,
+porque ACF gratuito no tiene páginas de opciones ni repetidores y así hay un plugin menos que auditar):
+- **Ajustes del sitio** (menú "Ajustes ENCILUZ"): teléfonos, correo general, dirección, redes, RIF,
+  título/subtítulo del hero, imagen hero, 4 cifras de impacto fijas (valor + etiqueta).
 - **Programa** (CPT): título, imagen destacada, resumen, descripción, estados, cifra destacada, orden.
 - **Sector** (CPT): título, ícono, descripción, orden.
 - **Miembro del equipo** (CPT): nombre, cargo, foto opcional, orden. Sin correos personales.
