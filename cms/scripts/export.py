@@ -166,6 +166,9 @@ def main() -> int:
         }],
     }
     (OUT / "vercel.json").write_text(json.dumps(vercel, indent=2, ensure_ascii=False))
+    # También en la raíz del repo: si en Vercel el «Root Directory» es la raíz, publica preview/ igual.
+    root_cfg = {**vercel, "framework": None, "buildCommand": None, "installCommand": None, "outputDirectory": "preview"}
+    (ROOT / "vercel.json").write_text(json.dumps(root_cfg, indent=2, ensure_ascii=False))
 
     # Verificaciones: nada del WordPress local ni rutas privadas; todo recurso local existe.
     problems = []
