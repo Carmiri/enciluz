@@ -33,6 +33,7 @@ services:
         define('WP_POST_REVISIONS', 10);
         define('WP_AUTO_UPDATE_CORE', 'minor');
         define('WP_ENVIRONMENT_TYPE', getenv('WP_ENVIRONMENT_TYPE') ?: 'production');
+        if ('local' === WP_ENVIRONMENT_TYPE) { define('WP_DEVELOPMENT_MODE', 'theme'); }
       WP_ENVIRONMENT_TYPE: ${WP_ENVIRONMENT_TYPE:-local}
     volumes:
       - ./data/wp:/var/www/html

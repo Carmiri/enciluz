@@ -1,0 +1,152 @@
+/* ENCILUZ — estilos del tema. Los colores y tipografías viven en theme.json. */
+
+:root { --enciluz-arco: 999px 999px 18px 18px; }
+
+.screen-reader-text {
+	border: 0; clip: rect(1px, 1px, 1px, 1px); clip-path: inset(50%);
+	height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute !important;
+	width: 1px; word-wrap: normal !important;
+}
+.skip-link:focus {
+	clip: auto; clip-path: none; height: auto; width: auto; z-index: 100000;
+	background: var(--wp--preset--color--amarillo); color: var(--wp--preset--color--tinta);
+	padding: 0.75rem 1rem; left: 1rem; top: 1rem;
+}
+
+:where(a, button, input, select, textarea, summary, .wp-element-button):focus-visible {
+	outline: 3px solid var(--wp--preset--color--azul-oscuro);
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+/* ——— Imagen en arco: el gesto del logo ——— */
+.wp-block-image.is-style-arco img {
+	border-radius: 50% 50% 14px 14px / 40% 40% 14px 14px;
+	aspect-ratio: 4 / 5;
+	object-fit: cover;
+	width: 100%;
+}
+.enciluz-programa .wp-block-image.is-style-arco img { aspect-ratio: 5 / 4; border-radius: 50% 50% 12px 12px / 28% 28% 12px 12px; }
+
+/* ——— Cabecera ——— */
+.enciluz-header { border-bottom: 1px solid #d7eaef; }
+.enciluz-header .wp-block-site-logo img { height: auto; }
+.enciluz-header .wp-block-button__link { white-space: nowrap; }
+@media (max-width: 600px) {
+	.enciluz-header .wp-block-buttons.enciluz-header__cta { display: none; }
+	.enciluz-header .wp-block-site-logo img { width: 200px; }
+}
+.enciluz-header .wp-block-navigation__responsive-container.is-menu-open { padding: 1.5rem; }
+
+/* ——— Hero ——— */
+.enciluz-hero { padding-block: var(--wp--preset--spacing--50); overflow: hidden; }
+.enciluz-hero__titulo { max-width: 16ch; }
+.enciluz-hero__texto { font-size: var(--wp--preset--font-size--large); max-width: 38ch; }
+.enciluz-hero__imagen { position: relative; margin: 0; }
+.enciluz-hero__imagen::before {
+	content: ""; position: absolute; inset: -14px -14px 35% -14px;
+	border: 12px solid var(--wp--preset--color--azul);
+	border-bottom: 0;
+	border-radius: 50% 50% 0 0 / 42% 42% 0 0;
+	pointer-events: none;
+}
+
+/* ——— Secciones ——— */
+.enciluz-seccion, .enciluz-intro, .enciluz-cta, .enciluz-banda { padding-block: var(--wp--preset--spacing--60); }
+.enciluz-banda { padding-block: var(--wp--preset--spacing--50); }
+.enciluz-intro { padding-block: var(--wp--preset--spacing--50); }
+.enciluz-lead { font-size: var(--wp--preset--font-size--large); }
+/* Todo lo que va dentro de una sección se alinea al ancho amplio, a la izquierda;
+   los párrafos conservan un largo de línea legible (≈ 68 caracteres). */
+:is(.enciluz-seccion, .enciluz-intro, .enciluz-cta) > :not(.alignfull):not(.alignwide) { max-width: var(--wp--style--global--wide-size); }
+:is(.enciluz-seccion, .enciluz-intro, .enciluz-cta) > p { box-sizing: border-box; padding-right: max(0px, calc(100% - 68ch)); }
+p { text-wrap: pretty; }
+
+/* Cifras */
+.enciluz-cifra { border-left: 4px solid var(--wp--preset--color--naranja); padding-left: 1rem; gap: 0.25rem; }
+.enciluz-cifra__valor { font-size: var(--wp--preset--font-size--xx-large); font-weight: 800; line-height: 1; color: var(--wp--preset--color--marron); margin: 0; }
+.enciluz-cifra__texto { margin: 0; }
+
+/* Sectores */
+.enciluz-sector .enciluz-icono { margin: 0 0 0.5rem; }
+.enciluz-sector .enciluz-icono img { width: 56px; height: 56px; }
+.enciluz-sector h3 { margin-top: 0; }
+
+/* Tarjetas */
+.wp-block-group.is-style-tarjeta {
+	background: var(--wp--preset--color--blanco);
+	border: 1px solid #cfe5eb;
+	border-radius: 22px;
+	padding: 1.25rem 1.25rem 1.5rem;
+	gap: 0.75rem;
+}
+.has-celeste-background-color .wp-block-group.is-style-tarjeta { border-color: #bcdce4; }
+.enciluz-programa .wp-block-image { margin: 0 0 0.25rem; }
+.enciluz-destacado { font-weight: 700; color: var(--wp--preset--color--azul-oscuro); margin: 0; }
+.enciluz-estados { font-size: var(--wp--preset--font-size--small); color: #3d4a4d; }
+.enciluz-programa-detalle { padding-block: var(--wp--preset--spacing--40); border-top: 1px solid #d7eaef; }
+
+/* Valores */
+.enciluz-valor h3 { position: relative; padding-left: 1.4rem; }
+.enciluz-valor h3::before {
+	content: ""; position: absolute; left: 0; top: 0.2em; width: 0.8rem; height: 1rem;
+	background: linear-gradient(to top, var(--wp--preset--color--naranja), var(--wp--preset--color--amarillo));
+	border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+}
+.enciluz-valor p { margin-top: 0.25rem; }
+
+/* Equipo */
+.enciluz-persona { border-top: 3px solid var(--wp--preset--color--azul); padding-top: 0.75rem; gap: 0.1rem; }
+.enciluz-persona__nombre { font-weight: 700; font-size: var(--wp--preset--font-size--large); margin: 0; }
+.enciluz-persona__cargo { margin: 0; color: #3d4a4d; }
+
+/* Aliados y documentos */
+.enciluz-aliado { font-weight: 700; margin: 0.4rem 0; }
+.enciluz-documentos { padding-left: 1.1rem; }
+.enciluz-documentos li { margin-bottom: 0.35rem; }
+
+/* Cobertura */
+.enciluz-estado h3 { margin-bottom: 0.25rem; }
+.enciluz-estado p { margin: 0.25rem 0; }
+
+/* Llamado a colaborar */
+.enciluz-cta h2, .enciluz-cta p { color: var(--wp--preset--color--tinta); }
+
+/* Botones */
+.wp-block-button.is-style-oscuro .wp-block-button__link { background: var(--wp--preset--color--azul-oscuro); color: var(--wp--preset--color--blanco); }
+.wp-block-button.is-style-oscuro .wp-block-button__link:hover { background: var(--wp--preset--color--tinta); }
+.wp-block-button.is-style-outline .wp-block-button__link { background: transparent; color: var(--wp--preset--color--tinta); border: 2px solid currentColor; }
+.wp-block-button .wp-block-button__link { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* Pie */
+.enciluz-footer__logo img { width: 110px; height: auto; }
+.enciluz-footer { color: var(--wp--preset--color--blanco); }
+.enciluz-footer a { color: var(--wp--preset--color--blanco); }
+.enciluz-footer a:hover { color: var(--wp--preset--color--amarillo); }
+.enciluz-footer h2 { color: var(--wp--preset--color--amarillo); font-size: var(--wp--preset--font-size--large); }
+.enciluz-footer .enciluz-legal { font-size: var(--wp--preset--font-size--small); opacity: 0.9; border-top: 1px solid rgba(255,255,255,0.25); padding-top: 1rem; }
+
+/* Formulario de contacto */
+.enciluz-form { display: grid; gap: 1rem; }
+.enciluz-form label { font-weight: 700; display: block; margin-bottom: 0.3rem; }
+.enciluz-form input, .enciluz-form select, .enciluz-form textarea {
+	width: 100%; font: inherit; padding: 0.7rem 0.8rem; border: 2px solid #8fb9c4; border-radius: 10px; background: #fff; color: var(--wp--preset--color--tinta);
+}
+.enciluz-form textarea { min-height: 9rem; }
+.enciluz-form .enciluz-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.enciluz-form button { font: inherit; font-weight: 700; cursor: pointer; border: 0; border-radius: 999px; padding: 0.8rem 1.6rem; min-height: 44px;
+	background: var(--wp--preset--color--naranja); color: var(--wp--preset--color--tinta); justify-self: start; }
+.enciluz-form button:hover { background: var(--wp--preset--color--amarillo); }
+.enciluz-aviso { padding: 1rem 1.25rem; border-radius: 12px; font-weight: 700; }
+.enciluz-aviso--ok { background: #e3f4e8; border-left: 5px solid #2e7d4a; }
+.enciluz-aviso--error { background: #fdecea; border-left: 5px solid #b3261e; }
+.enciluz-form small { color: #3d4a4d; }
+
+@media (max-width: 781px) {
+	.enciluz-hero__imagen::before { inset: -8px -8px 40% -8px; border-width: 8px; }
+	.enciluz-hero .wp-block-column:last-child { order: -1; max-width: 22rem; margin-inline: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}

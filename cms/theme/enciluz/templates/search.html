@@ -2,23 +2,20 @@
 
 <!-- wp:group {"tagName":"main","className":"enciluz-seccion","layout":{"type":"constrained"}} -->
 <main class="wp-block-group enciluz-seccion">
-<!-- wp:query-title {"type":"archive"} /-->
+<!-- wp:query-title {"type":"search"} /-->
 
-<!-- wp:query {"queryId":1,"query":{"perPage":10,"postType":"post","inherit":true}} -->
+<!-- wp:search {"label":"Buscar en el sitio","buttonText":"Buscar"} /-->
+
+<!-- wp:query {"queryId":2,"query":{"perPage":10,"postType":"page","inherit":true}} -->
 <div class="wp-block-query">
 <!-- wp:post-template -->
 <!-- wp:post-title {"isLink":true,"level":2} /-->
 <!-- wp:post-excerpt /-->
 <!-- /wp:post-template -->
 
-<!-- wp:query-pagination -->
-<!-- wp:query-pagination-previous /-->
-<!-- wp:query-pagination-next /-->
-<!-- /wp:query-pagination -->
-
 <!-- wp:query-no-results -->
 <!-- wp:paragraph -->
-<p>Todavía no hay publicaciones.</p>
+<p>No hay resultados. Prueba con otras palabras.</p>
 <!-- /wp:paragraph -->
 <!-- /wp:query-no-results -->
 </div>
