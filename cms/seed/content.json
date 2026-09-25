@@ -1,0 +1,219 @@
+{
+  "settings": {
+    "siteName": "Fundación Enciende una Luz",
+    "tagline": "Protección, salud y dignidad para las comunidades de Venezuela",
+    "heroTitle": "Encendemos una luz donde más se necesita",
+    "heroSubtitle": "Desde 2008 acompañamos a niñas, niños, adolescentes, mujeres y familias con salud, nutrición, protección, agua y saneamiento, medios de vida y educación en ocho estados del país.",
+    "email": "fundacionenciluz@gmail.com",
+    "phones": ["0426-510-17-02", "0412-474-62-40", "0412-474-73-26"],
+    "whatsapp": "584265101702",
+    "address": "Edo. Miranda, Mun. Sucre, Parroquia La Dolorita, Polideportivo, Sector 15 de Agosto, Casa 9",
+    "rif": "J-29721263-9",
+    "registry": "Registrada el 26/09/2008 bajo el No 24, tomo 31, Protocolo de Transcripción, del Registro Público del Primer Circuito del Municipio Sucre del Estado Miranda.",
+    "social": {
+      "facebook": "",
+      "instagram": "https://www.instagram.com/enciluz",
+      "tiktok": "https://www.tiktok.com/@enciluz",
+      "x": "https://x.com/enciluz"
+    },
+    "stats": [
+      {"value": "15.733", "label": "personas atendidas en salud en 2025"},
+      {"value": "312", "label": "mujeres fortalecidas (2021–2024)"},
+      {"value": "8", "label": "estados con presencia"},
+      {"value": "2008", "label": "año de fundación"}
+    ],
+    "mission": "Proteger y acompañar a las personas y comunidades más afectadas por la crisis, con servicios de salud, nutrición, protección, agua y saneamiento, medios de vida y educación que llegan incluso a los lugares de difícil acceso, siempre con dignidad y enfoque de derechos.",
+    "identity": "Somos una ONG nacional, basada en fe, liderada por mujeres y con enfoque comunitario, especialista en protección. Trabajamos de la mano con las comunidades y con un amplio tejido social en todo el país, lo que nos permite llegar a zonas de difícil acceso y responder con cercanía a cada necesidad."
+  },
+  "history": [
+    "La Fundación de Bienestar Social Enciende una Luz (ENCILUZ) fue registrada el 26 de septiembre de 2008 en el Registro Público del Primer Circuito del Municipio Sucre del Estado Miranda. Desde nuestra sede en la parroquia La Dolorita hemos crecido junto a las comunidades a las que servimos.",
+    "Somos una ONG nacional, basada en fe, liderada por mujeres y con enfoque comunitario, especialista en protección. Acompañamos a niñas, niños y adolescentes, mujeres, jóvenes y familias con programas de salud, nutrición, protección, agua, saneamiento e higiene, seguridad alimentaria, medios de vida y educación.",
+    "Hoy tenemos presencia en Distrito Capital, Amazonas, Apure, Anzoátegui, Miranda, Monagas, Yaracuy y Zulia, incluyendo comunidades indígenas piaroa, yeckuana, puinave, jivi, curriapo y kariña. Nuestro gran tejido social a nivel nacional facilita el acceso a lugares de difícil acceso, la logística, la convocatoria y el alcance de los objetivos que nos proponemos.",
+    "Formamos parte de la Red PEAS, la Red de Igualdad de Género, la Red CAFI y la Red de OBF. Además, mantenemos una alianza con el Consejo de Protección de Niños, Niñas y Adolescentes (CPNNA) para la remisión de casos durante todo el año, las 24 horas del día, con comunicación directa con los defensores de guardia, para proteger a la niñez y la adolescencia en todos los contextos, incluso en emergencias."
+  ],
+  "values": [
+    {"title": "Fe", "text": "Nuestra fe inspira el servicio y la esperanza que llevamos a cada comunidad."},
+    {"title": "Protección", "text": "Ponemos la seguridad y el bienestar de cada persona, especialmente de la niñez, en el centro de todo lo que hacemos."},
+    {"title": "Dignidad", "text": "Reconocemos el valor de cada persona y respetamos sus derechos, su historia y sus decisiones."},
+    {"title": "Solidaridad", "text": "Caminamos junto a quienes más lo necesitan y sumamos esfuerzos con otras personas y organizaciones."},
+    {"title": "Transparencia", "text": "Rendimos cuentas a las comunidades, aliados y donantes sobre lo que hacemos y cómo lo hacemos."},
+    {"title": "Equidad", "text": "Trabajamos para que mujeres, niñas y grupos en situación de vulnerabilidad accedan a las mismas oportunidades."},
+    {"title": "Compromiso", "text": "Llegamos hasta los lugares de difícil acceso y cumplimos con lo que prometemos."},
+    {"title": "Empatía", "text": "Escuchamos y acompañamos con respeto, calidez y sin juzgar."}
+  ],
+  "sectors": [
+    {"slug": "salud", "title": "Salud", "icon": "health", "summary": "Atención médica primaria y preventiva, entrega de tratamiento, dotación de medicamentos e insumos médicos y seguimiento a cada paciente."},
+    {"slug": "nutricion", "title": "Nutrición", "icon": "nutrition", "summary": "Tamizaje nutricional, entrega de tratamiento terapéutico y seguimiento para recuperar la salud de quienes más lo necesitan."},
+    {"slug": "proteccion", "title": "Protección", "icon": "shield", "summary": "Protección general, de niñas, niños y adolescentes y frente a la violencia basada en género: gestión de caso, documentación, acogida en espacio seguro y derivación segura."},
+    {"slug": "saneamiento-higiene", "title": "Agua, saneamiento e higiene", "icon": "water", "summary": "Formación en lavado de manos, promoción de agua segura, potabilización, manejo menstrual, kits de higiene para familias e instituciones y comités y brigadas de saneamiento."},
+    {"slug": "medios-de-vida", "title": "Seguridad alimentaria y medios de vida", "icon": "seed", "summary": "Recuperación de medios de vida productivos y agrícolas para mujeres, jóvenes y familias más afectadas por la crisis, con fondos de ahorro y autofinanciamiento."},
+    {"slug": "educacion", "title": "Educación", "icon": "book", "summary": "Aulas integrales convencionales y no convencionales con nivelación, refuerzo, recuperación y educación acelerada."}
+  ],
+  "programs": [
+    {
+      "slug": "vidas-con-valor",
+      "title": "Vidas con Valor",
+      "summary": "Acogida y refugio para personas con necesidad de protección, con alimentación, atención médica, acompañamiento legal, apoyo psicosocial y aprendizaje de un oficio.",
+      "body": [
+        "Vidas con Valor ofrece acogida y refugio a personas con necesidad de protección: refugiados, retornados, desplazados, personas en movilidad y sobrevivientes de trata y de violencia basada en género. Brindamos servicios de acogida y atención especializada a personas retornadas y con necesidad de refugio.",
+        "Cada persona recibe alimentación, atención médica, acompañamiento legal, apoyo psicosocial y la oportunidad de aprender un oficio para reconstruir su proyecto de vida con dignidad."
+      ],
+      "states": ["Miranda", "Zulia"],
+      "highlight": "Diseñado para atender 600 personas al año"
+    },
+    {
+      "slug": "gestion-documentos",
+      "title": "Gestión de Documentos",
+      "summary": "Renovación y recuperación de documentos, presentación y cedulación extemporánea para niñas, niños, adolescentes y sus cuidadoras y cuidadores.",
+      "body": [
+        "Contar con documentos de identidad es la puerta de entrada a otros derechos. Acompañamos a las familias en la renovación y recuperación de sus documentos.",
+        "Gestionamos la presentación y cedulación extemporánea de niñas, niños y adolescentes, así como de sus cuidadoras y cuidadores, para que puedan acceder a la salud, la educación y la protección."
+      ],
+      "states": [],
+      "highlight": ""
+    },
+    {
+      "slug": "habilidades-emocionales",
+      "title": "Fortaleciendo Habilidades Emocionales",
+      "summary": "Acompañamiento a mujeres para fortalecer su bienestar emocional, su capacidad de afrontamiento y la resolución de conflictos.",
+      "body": [
+        "Este programa acompaña a mujeres en el fortalecimiento de sus habilidades emocionales. Entre 2021 y 2024 hemos atendido a 312 mujeres.",
+        "El 90 % de las participantes ha manifestado fortaleza emocional y capacidad de resolución de conflictos, y se observa en ellas capacidad de resiliencia y de afrontamiento."
+      ],
+      "states": ["Miranda", "Anzoátegui", "Monagas", "Distrito Capital"],
+      "highlight": "312 mujeres · 90 % reporta fortaleza emocional"
+    },
+    {
+      "slug": "habilidades-economicas",
+      "title": "Fortalecimiento de Habilidades Económicas y Financieras",
+      "summary": "Formación para que las mujeres emprendan sus propios negocios, manejen su dinero y avancen hacia la autonomía económica.",
+      "body": [
+        "Acompañamos a mujeres en el desarrollo de habilidades económicas y financieras para poner en marcha sus propios negocios y administrar mejor sus recursos.",
+        "Las mujeres participantes han manifestado haber logrado independencia financiera y autonomía económica gracias a sus emprendimientos y al manejo de su dinero."
+      ],
+      "states": ["Miranda", "Anzoátegui", "Monagas", "Distrito Capital"],
+      "highlight": ""
+    },
+    {
+      "slug": "aulas-integrales",
+      "title": "Aulas Integrales",
+      "summary": "Aulas integrales convencionales, no convencionales y aulas anexas con nivelación, refuerzo, recuperación y educación acelerada.",
+      "body": [
+        "El programa de Aulas Integrales Convencionales, No Convencionales y Aulas Anexas acerca la educación a niñas, niños y adolescentes que han visto interrumpida su escolaridad.",
+        "A través de la nivelación, el refuerzo, la recuperación y la educación acelerada, apoyamos su permanencia y su avance en el sistema educativo."
+      ],
+      "states": ["Miranda", "Distrito Capital", "Amazonas", "Apure", "Nueva Esparta", "Guárico", "La Guaira"],
+      "highlight": ""
+    },
+    {
+      "slug": "salud-integral",
+      "title": "Salud Integral",
+      "summary": "Jornadas de atención médica y entrega de tratamiento en zonas de difícil acceso de todo el país, según la solicitud de las comunidades.",
+      "body": [
+        "El Programa de Salud Integral lleva atención médica a zonas de difícil acceso a nivel nacional, según la solicitud realizada por las comunidades.",
+        "En 2025 atendimos aproximadamente a 15.733 personas: al 99,9 % se le realizó una consulta médica y al 98 % se le suministró el tratamiento médico recetado."
+      ],
+      "states": ["Nacional (zonas de difícil acceso)"],
+      "highlight": "15.733 personas atendidas en 2025"
+    },
+    {
+      "slug": "salud-sexual-reproductiva",
+      "title": "Acceso a la Salud Sexual y Reproductiva",
+      "summary": "Acceso a servicios e información de salud sexual y reproductiva en comunidades de Anzoátegui y Miranda.",
+      "body": [
+        "Promovemos el acceso a la salud sexual y reproductiva como un derecho, con especial atención a mujeres, adolescentes y jóvenes.",
+        "El programa se desarrolla en el Municipio Bruzual del estado Anzoátegui y en el Municipio Sucre del estado Miranda."
+      ],
+      "states": ["Anzoátegui (Mun. Bruzual)", "Miranda (Mun. Sucre)"],
+      "highlight": ""
+    },
+    {
+      "slug": "proteccion-nna",
+      "title": "Acceso a Protección para Niñas, Niños y Adolescentes",
+      "summary": "Protección a niñas, niños y adolescentes en el Municipio Sucre de Miranda, con remisión de casos al CPNNA las 24 horas.",
+      "body": [
+        "Trabajamos para que niñas, niños y adolescentes del Municipio Sucre, en el estado Miranda, accedan a la protección que necesitan, con gestión de caso, documentación, acogida en espacio seguro y derivación segura.",
+        "Gracias a nuestra alianza con el CPNNA, remitimos casos durante todo el año, las 24 horas del día, con comunicación directa con los defensores de guardia, para proteger a la niñez en todos los contextos, aun en los de emergencia."
+      ],
+      "states": ["Miranda (Mun. Sucre)"],
+      "highlight": "Remisión de casos al CPNNA 24 horas"
+    },
+    {
+      "slug": "servicios-emergencia",
+      "title": "Servicios de Emergencia",
+      "summary": "Gestión de casos y apoyo psicosocial para personas y familias en situaciones de emergencia.",
+      "body": [
+        "Cuando una emergencia golpea a una comunidad, respondemos con gestión de casos y apoyo psicosocial para las personas y familias afectadas.",
+        "Nuestro enfoque de protección y nuestro tejido social en todo el país nos permiten llegar a tiempo y acompañar con cercanía."
+      ],
+      "states": [],
+      "highlight": ""
+    }
+  ],
+  "team": [
+    {"name": "Eudenis Olano", "role": "Directora General"},
+    {"name": "Keylin Bello", "role": "Administración"},
+    {"name": "Lic. Virginia Miranda", "role": "Contadora"},
+    {"name": "Darwin Ramírez", "role": "Monitoreo y Evaluación de Programas"},
+    {"name": "Edgardo Ramírez", "role": "Logística"},
+    {"name": "Lic. Omaira Crespo", "role": "Oficial de Protección"},
+    {"name": "Dra. Mirian Rojas", "role": "Oficial de Nutrición"},
+    {"name": "Dr. Edgar Jaime", "role": "Oficial de Salud"},
+    {"name": "Docente Milena Sojo", "role": "Oficial de Educación"}
+  ],
+  "allies": [
+    {"name": "South Tulsa Baptist Church", "url": "", "kind": "donante"},
+    {"name": "Acción Solidaria", "url": "", "kind": "donante"},
+    {"name": "Acción Contra el Hambre", "url": "https://www.accioncontraelhambre.org", "kind": "donante"},
+    {"name": "Ambassade de France au Venezuela", "url": "https://ve.ambafrance.org", "kind": "donante"},
+    {"name": "Red PEAS", "url": "", "kind": "red"},
+    {"name": "Red de Igualdad de Género", "url": "", "kind": "red"},
+    {"name": "Red CAFI", "url": "", "kind": "red"},
+    {"name": "Red de OBF", "url": "", "kind": "red"}
+  ],
+  "documents": [
+    {"title": "Prevención de la Explotación y el Abuso Sexual (PEAS)", "category": "protocolo"},
+    {"title": "Salvaguardas", "category": "protocolo"},
+    {"title": "Manual de Monitoreo y Evaluación", "category": "manual"},
+    {"title": "Manual de Conflicto de Interés", "category": "manual"},
+    {"title": "Manual de Adquisiciones", "category": "manual"},
+    {"title": "Manual de Auditorías", "category": "manual"},
+    {"title": "Manual de Gestión de Activos", "category": "manual"},
+    {"title": "Manual de Políticas Contables", "category": "manual"},
+    {"title": "Manual de Procedimientos de RR. HH.", "category": "manual"},
+    {"title": "Manual de Procedimientos Logísticos", "category": "manual"},
+    {"title": "Manual de Política Ambiental", "category": "manual"},
+    {"title": "Manual de Política de Protección de Datos", "category": "manual"},
+    {"title": "Manual de Servicios EAT", "category": "manual"},
+    {"title": "Guía Básica de VbG", "category": "protocolo"},
+    {"title": "Código de Ética, Conducta y Compromiso", "category": "codigo"},
+    {"title": "Código de Política Antifraude", "category": "codigo"},
+    {"title": "Consideraciones sobre grupos de personas específicas", "category": "protocolo"},
+    {"title": "Manual de AAP (Rendición de Cuentas a Poblaciones Afectadas)", "category": "manual"},
+    {"title": "Manual de Organización y Funciones", "category": "manual"},
+    {"title": "Manual de Gestión de Proveedores", "category": "manual"},
+    {"title": "Marco ético y canal de denuncias", "category": "protocolo"},
+    {"title": "Mandato", "category": "protocolo"}
+  ],
+  "coverage": [
+    {"state": "Distrito Capital", "municipalities": ["Libertador"], "ethnicities": []},
+    {"state": "Amazonas", "municipalities": ["Ature", "Manapiare"], "ethnicities": ["Piaroa", "Yeckuana", "Puinave", "Jivi", "Curriapo"]},
+    {"state": "Apure", "municipalities": ["San Fernando"], "ethnicities": []},
+    {"state": "Anzoátegui", "municipalities": ["Manuel Ezequiel Bruzual"], "ethnicities": ["Kariña"]},
+    {"state": "Miranda", "municipalities": ["Sucre", "Ezequiel Zamora", "Plaza", "Tomás Lander"], "ethnicities": []},
+    {"state": "Monagas", "municipalities": ["Maturín"], "ethnicities": []},
+    {"state": "Yaracuy", "municipalities": ["San Felipe"], "ethnicities": []},
+    {"state": "Zulia", "municipalities": ["San Francisco"], "ethnicities": []}
+  ],
+  "transparency": {
+    "intro": "Creemos que la confianza se construye rindiendo cuentas. Por eso contamos con protocolos, manuales y códigos que orientan nuestra gestión, y los ponemos a disposición de las comunidades, aliados y donantes.",
+    "peas": "Aplicamos una política de tolerancia cero frente a la explotación y el abuso sexual (PEAS). Todas las personas que forman parte de ENCILUZ se comprometen con nuestras salvaguardas y con el Código de Ética, Conducta y Compromiso, para que cada niña, niño, adolescente y persona adulta que atendemos esté protegida. Además, formamos parte de la Red PEAS.",
+    "complaints": "Disponemos de un canal de denuncias confidencial para reportar cualquier conducta que vaya en contra de nuestros valores y protocolos. Para usarlo, completa el formulario de contacto y selecciona el motivo \"Denuncia\"; tu reporte será tratado con reserva y según nuestro Marco ético y canal de denuncias."
+  },
+  "collaborate": [
+    {"title": "Voluntariado", "text": "Suma tu tiempo y tus conocimientos a nuestras jornadas y programas en las comunidades."},
+    {"title": "Alianzas institucionales", "text": "Si representas a una organización, empresa o institución, trabajemos juntos para ampliar el alcance de nuestros programas."},
+    {"title": "Donaciones en especie", "text": "Tus aportes de insumos médicos, kits de higiene y útiles escolares llegan directamente a las familias que más lo necesitan."},
+    {"title": "Difusión", "text": "Comparte nuestro trabajo en tus redes y ayúdanos a que más personas conozcan y apoyen la labor de ENCILUZ."}
+  ]
+}

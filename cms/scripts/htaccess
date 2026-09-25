@@ -1,0 +1,25 @@
+# ENCILUZ — reglas de seguridad (Apache). Se copia a la raíz de WordPress en setup.sh.
+Options -Indexes
+ServerSignature Off
+
+<FilesMatch "^(xmlrpc\.php|readme\.html|license\.txt|wp-config\.php|wp-config-sample\.php|wp-config-docker\.php|\.htaccess|.*\.(sql|log|bak|ini|sh))$">
+	Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+	Header always unset X-Powered-By
+	Header always set X-Content-Type-Options "nosniff"
+	Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress

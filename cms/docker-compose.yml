@@ -1,0 +1,55 @@
+name: enciluz
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wp
+      MARIADB_PASSWORD: ${DB_PASSWORD:?define DB_PASSWORD en .env}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?define DB_ROOT_PASSWORD en .env}
+    volumes:
+      - ./data/db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      retries: 20
+
+  wordpress:
+    image: wordpress:php8.3-apache
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    ports:
+      - "127.0.0.1:8088:80"
+    environment: &wpenv
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: |
+        define('DISALLOW_FILE_EDIT', true);
+        define('DISALLOW_UNFILTERED_HTML', true);
+        define('WP_POST_REVISIONS', 10);
+        define('WP_AUTO_UPDATE_CORE', 'minor');
+        define('WP_ENVIRONMENT_TYPE', getenv('WP_ENVIRONMENT_TYPE') ?: 'production');
+      WP_ENVIRONMENT_TYPE: ${WP_ENVIRONMENT_TYPE:-local}
+    volumes:
+      - ./data/wp:/var/www/html
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./theme/enciluz:/var/www/html/wp-content/themes/enciluz:ro
+
+  cli:
+    image: wordpress:cli-php8.3
+    profiles: [cli]
+    user: "33:33"
+    depends_on: [wordpress]
+    environment:
+      <<: *wpenv
+      HOME: /tmp
+    volumes:
+      - ./data/wp:/var/www/html
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./theme/enciluz:/var/www/html/wp-content/themes/enciluz:ro
+      - ./seed:/seed:ro
+      - ./scripts:/scripts:ro
