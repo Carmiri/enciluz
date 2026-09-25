@@ -65,3 +65,20 @@ add_filter('upload_mimes', static fn(): array => [
 // Comentarios desactivados en todo el sitio (no se usan).
 add_filter('comments_open', '__return_false', 9999);
 add_action('admin_menu', static fn() => remove_menu_page('edit-comments.php'));
+
+// Sin autores en oEmbed ni en la API REST para visitantes anónimos.
+add_filter('oembed_response_data', static function (array $data): array {
+	unset($data['author_name'], $data['author_url']);
+	return $data;
+});
+foreach (['post', 'page', 'attachment'] as $enciluz_type) {
+	add_filter("rest_prepare_{$enciluz_type}", static function ($response) {
+		if (!is_user_logged_in() && $response instanceof WP_REST_Response) {
+			$data = $response->get_data();
+			unset($data['author']);
+			$response->set_data($data);
+			$response->remove_link('author');
+		}
+		return $response;
+	});
+}

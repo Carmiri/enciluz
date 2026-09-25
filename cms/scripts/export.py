@@ -173,12 +173,14 @@ def main() -> int:
         if f.suffix not in {".html", ".css", ".js"}:
             continue
         text = f.read_text("utf-8", errors="ignore")
-        for bad in ("localhost:8088", "/wp-admin/", "/wp-json", "acceso-enciluz", "xmlrpc", 'nonce="'):
+        for bad in (urlparse(BASE).netloc, "/wp-admin/", "/wp-json", "acceso-enciluz", "xmlrpc", 'nonce="'):
             if bad in text:
                 problems.append(f"{f.relative_to(OUT)} contiene {bad}")
         if f.suffix == ".html":
-            for m in re.finditer(r"""(?:src|href)=["'](/[^"'#?]*)""", text):
-                p = m.group(1)
+            refs = [m.group(1) for m in re.finditer(r"""(?:src|href)=["'](/[^"'#?]*)""", text)]
+            for m in re.finditer(r'srcset="([^"]+)"', text):
+                refs += [c.strip().split(" ")[0].split("?")[0] for c in m.group(1).split(",") if c.strip().startswith("/")]
+            for p in refs:
                 target = OUT / p.lstrip("/")
                 if not (target.exists() or (target / "index.html").exists() or target.with_suffix(".html").exists()):
                     problems.append(f"{f.relative_to(OUT)} enlaza a {p}, que no existe")

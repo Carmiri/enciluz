@@ -52,10 +52,7 @@ function enciluz_common_headers(): void {
 add_action('send_headers', static function (): void {
 	enciluz_common_headers();
 	header('X-Frame-Options: DENY');
-	// El editor del sitio carga el front en un iframe propio: sin CSP estricta para sesiones con permisos de edición.
-	if (!current_user_can('edit_posts')) {
-		header('Content-Security-Policy: ' . enciluz_csp());
-	}
+	header('Content-Security-Policy: ' . enciluz_csp());
 });
 
 add_action('admin_init', static function (): void {
@@ -65,4 +62,11 @@ add_action('admin_init', static function (): void {
 add_action('login_init', static function (): void {
 	enciluz_common_headers();
 	header('X-Frame-Options: DENY');
+});
+
+// La API REST no pasa por send_headers.
+add_filter('rest_pre_serve_request', static function ($served) {
+	enciluz_common_headers();
+	header('X-Frame-Options: DENY');
+	return $served;
 });

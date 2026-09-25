@@ -14,6 +14,8 @@ if ! wp core is-installed 2>/dev/null; then
   echo " Admin: enciluz-admin   Clave: $ADMIN_PASS"
   echo " Guárdala ahora: no se vuelve a mostrar."
   echo "======================================================"
+  # Contenido de ejemplo de WordPress fuera (solo en la instalación inicial)
+  wp post delete 1 2 3 --force 2>/dev/null || true
 fi
 
 wp language core install es_ES --activate || true
@@ -39,10 +41,6 @@ if ! wp user get cliente >/dev/null 2>&1; then
   echo " Editor: cliente   Clave: $CLI_PASS"
 fi
 
-# Contenido de ejemplo de WordPress fuera
-wp post delete 1 --force 2>/dev/null || true
-wp post delete 2 --force 2>/dev/null || true
-wp post delete 3 --force 2>/dev/null || true
 
 if [ -f /seed/content.json ] && [ -f /scripts/seed.php ]; then
   wp eval-file /scripts/seed.php

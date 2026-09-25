@@ -42,6 +42,35 @@ for h in 'content-security-policy' 'x-frame-options' 'x-content-type-options: no
   grep -qi "^$h" <<<"$hdr" && ok "cabecera $h" || bad "cabecera $h" "ausente"
 done
 
+# Cabeceras también en la API REST y en archivos estáticos
+rh="$(curl -sI "$B/wp-json/")"
+grep -qi '^x-powered-by' <<<"$rh" && bad "REST sin X-Powered-By" "presente" || ok "REST sin X-Powered-By"
+grep -qi '^x-content-type-options: nosniff' <<<"$rh" && ok "REST con nosniff" || bad "REST con nosniff" "ausente"
+grep -qi '^x-frame-options' <<<"$rh" && ok "REST con X-Frame-Options" || bad "REST con X-Frame-Options" "ausente"
+sh="$(curl -sI "$B/wp-content/themes/enciluz/assets/css/theme.css")"
+grep -qi '^x-content-type-options: nosniff' <<<"$sh" && ok "estáticos con nosniff" || bad "estáticos con nosniff" "ausente"
+hs="$(curl -sI -H 'X-Forwarded-Proto: https' "$B/")"
+[ "$(grep -ci '^strict-transport-security' <<<"$hs")" = "1" ] && ok "HSTS (una vez) detrás de proxy TLS" || bad "HSTS (una vez) detrás de proxy TLS" "$(grep -ci '^strict-transport-security' <<<"$hs") cabeceras"
+
+# oEmbed y REST de páginas no revelan autores
+oe="$(curl -s "$B/wp-json/oembed/1.0/embed?url=$B/quienes-somos/")"
+grep -q 'author_name\|author_url' <<<"$oe" && bad "oEmbed sin autor" "expone autor" || ok "oEmbed sin autor"
+
+# CSP también con sesión iniciada
+PASS="$(grep -oP 'cliente / \K\S+' "$DIR/CREDENCIALES-LOCAL.txt" 2>/dev/null)"
+JAR="$(mktemp)"
+curl -s -c "$JAR" -b "$JAR" -o /dev/null "$B/acceso-enciluz/"
+curl -s -c "$JAR" -b "$JAR" -o /dev/null --data-urlencode "log=cliente" --data-urlencode "pwd=$PASS" --data-urlencode "wp-submit=Acceder" --data-urlencode "testcookie=1" "$B/acceso-enciluz/"
+if grep -q wordpress_logged_in "$JAR"; then
+  grep -qi '^content-security-policy' <<<"$(curl -sI -b "$JAR" "$B/")" && ok "CSP con sesión iniciada" || bad "CSP con sesión iniciada" "ausente"
+  pg="$(curl -s -b "$JAR" "$B/wp-json/wp/v2/pages?per_page=1&_fields=author" -o /dev/null -w '%{http_code}')"
+else
+  bad "login de prueba" "no se pudo iniciar sesión"
+fi
+rm -f "$JAR"
+pa="$(curl -s "$B/wp-json/wp/v2/pages?per_page=1")"
+grep -q '"author":' <<<"$pa" && bad "REST de páginas sin ID de autor (anónimo)" "expone author" || ok "REST de páginas sin ID de autor (anónimo)"
+
 # Pruebas con wp-cli (capacidades y contenido)
 wpcli() { (cd "$DIR" && docker compose run --rm --no-deps -T cli wp "$@" 2>/dev/null); }
 if (cd "$DIR" && docker compose ps --status running -q wordpress | grep -q .); then

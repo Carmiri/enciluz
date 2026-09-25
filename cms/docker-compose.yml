@@ -22,6 +22,7 @@ services:
       db: { condition: service_healthy }
     ports:
       - "127.0.0.1:8088:80"
+    command: ["bash", "-c", "a2enmod headers >/dev/null && exec docker-entrypoint.sh apache2-foreground"]
     environment: &wpenv
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wp
@@ -39,6 +40,7 @@ services:
       - ./data/wp:/var/www/html
       - ./mu-plugins:/var/www/html/wp-content/mu-plugins:ro
       - ./theme/enciluz:/var/www/html/wp-content/themes/enciluz:ro
+      - ./config/php.ini:/usr/local/etc/php/conf.d/zz-enciluz.ini:ro
 
   cli:
     image: wordpress:cli-php8.3

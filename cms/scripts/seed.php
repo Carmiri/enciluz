@@ -74,7 +74,8 @@ function enciluz_seed_page(string $slug, string $title, string $content, bool $f
 		'post_excerpt' => $excerpt,
 		'page_template' => $template ?: 'default',
 	];
-	if ($page && !$force) {
+	// Solo se reescriben páginas creadas por esta siembra (meta _enciluz_seed), nunca las del cliente.
+	if ($page && (!$force || !get_post_meta($page->ID, '_enciluz_seed', true))) {
 		WP_CLI::log("Existe (sin cambios): {$slug}");
 		return $page->ID;
 	}

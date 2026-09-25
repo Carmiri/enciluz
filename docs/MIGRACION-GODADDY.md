@@ -14,6 +14,13 @@ Requisitos del plan: WordPress administrado o cPanel, PHP 8.3, MySQL/MariaDB, SS
    define('WP_AUTO_UPDATE_CORE', 'minor');
    define('WP_ENVIRONMENT_TYPE', 'production');
    ```
+   Si GoDaddy pone un proxy o CDN delante (compruébalo: en una página de prueba `REMOTE_ADDR` sería la IP del
+   proxy y no la tuya), declara sus IP para que el límite del formulario use la IP real del visitante, y
+   reconoce el HTTPS del proxy para que se envíe HSTS:
+   ```php
+   define('ENCILUZ_TRUSTED_PROXIES', 'IP_DEL_PROXY_1,IP_DEL_PROXY_2');
+   if (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') { $_SERVER['HTTPS'] = 'on'; }
+   ```
    Asegúrate de que las claves y sales (`AUTH_KEY`, etc.) sean únicas: https://api.wordpress.org/secret-key/1.1/salt/
 4. **.htaccess**: reemplazar el de la raíz por `cms/scripts/htaccess` y copiar `cms/scripts/uploads-htaccess`
    como `wp-content/uploads/.htaccess`. Borrar `readme.html`, `license.txt` y `wp-config-sample.php`.
@@ -26,8 +33,10 @@ Requisitos del plan: WordPress administrado o cPanel, PHP 8.3, MySQL/MariaDB, SS
 7. **Cuentas**: crear las cuentas definitivas, activar 2FA en todas, borrar las de prueba.
 8. **Correo**: configurar en **Ajustes → Generales** el correo del formulario. Si GoDaddy no entrega correos con
    `wp_mail`, configurar SMTP del dominio con su herramienta de correo o un plugin SMTP liviano.
-9. **Verificar**: `bash cms/tests/security.sh https://enciluz.com` (las pruebas HTTP deben pasar) y revisar
+9. **Caché**: si el hosting activa caché de página, **excluye `/contacto/`** (el formulario ya envía
+   `Cache-Control: no-store`, pero algunas cachés lo ignoran). Desactiva `expose_php` en el PHP del hosting si es posible.
+10. **Verificar**: `bash cms/tests/security.sh https://enciluz.com` (las pruebas HTTP deben pasar) y revisar
    https://securityheaders.com.
-10. **Copias de seguridad** diarias en el panel de GoDaddy.
+11. **Copias de seguridad** diarias en el panel de GoDaddy.
 
 La vista previa de Vercel se puede dar de baja cuando el sitio esté en producción.

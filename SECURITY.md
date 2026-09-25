@@ -18,7 +18,7 @@ No se cargan scripts, fuentes, iframes ni analíticas de terceros. Las fuentes y
 | Control | Implementación | Verificación |
 |---|---|---|
 | XML-RPC deshabilitado (sin métodos, sin pingbacks) | `cms/mu-plugins/enciluz/hardening.php` + `.htaccess` deniega `xmlrpc.php` | `security.sh`: «XML-RPC deshabilitado» |
-| Sin enumeración de usuarios (`/wp-json/wp/v2/users`, `?author=N`, archivos de autor, sitemap de usuarios) | `hardening.php` | `security.sh`: 4 pruebas |
+| Sin enumeración de usuarios (`/wp-json/wp/v2/users`, `?author=N`, archivos de autor, sitemap de usuarios, autor en oEmbed y en la REST de páginas para anónimos) | `hardening.php` | `security.sh`: 6 pruebas |
 | Login en URL no estándar; `/wp-login.php` y `/wp-admin/` no revelan la ruta | WPS Hide Login (`whl_page=acceso-enciluz`, redirección a 404) | `security.sh` |
 | Límite de intentos de acceso | Limit Login Attempts Reloaded | Configuración del plugin |
 | Doble factor (2FA) | Plugin Two Factor (TOTP). **Obligatorio activarlo en cada cuenta al entregar** | Perfil de usuario → «Opciones de dos factores» |
@@ -29,8 +29,8 @@ No se cargan scripts, fuentes, iframes ni analíticas de terceros. Las fuentes y
 | Nunca se ejecuta PHP dentro de `uploads/` | `wp-content/uploads/.htaccess` | Revisión de archivo |
 | Archivos sensibles denegados (`wp-config.php`, `.htaccess`, `*.sql`, `*.log`, `*.bak`, `*.ini`, `*.sh`) y sin listado de directorios | `cms/scripts/htaccess` | Revisión de archivo |
 | Comentarios y pingbacks deshabilitados | `hardening.php`, opciones en `setup.sh` | — |
-| Cabeceras: CSP con nonce por petición, `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `COOP`, HSTS en HTTPS, sin `X-Powered-By` | `cms/mu-plugins/enciluz/headers.php` | `security.sh`: 6 pruebas |
-| Formulario de contacto: nonce, token firmado con HMAC y tiempo mínimo de 3 s, honeypot, límite de 5 envíos cada 10 min por IP (hash de la IP, no se guarda en claro), validación de longitud y formato, bloqueo de saltos de línea (inyección de cabeceras), tamaño máximo de 10 KB, redirección POST→GET | `cms/mu-plugins/enciluz/contact.php` | `contact.sh`: 29 pruebas |
+| Cabeceras: CSP con nonce por petición (también con sesión iniciada), `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `COOP`, HSTS en HTTPS (también detrás de un proxy TLS que envíe `X-Forwarded-Proto`), sin `X-Powered-By`; las mismas cabeceras en la API REST y `nosniff` en archivos estáticos | `headers.php`, `.htaccess` (`mod_headers`), `expose_php = Off` | `security.sh`: 12 pruebas |
+| Formulario de contacto: nonce, token firmado con HMAC, único y **de un solo uso**, tiempo mínimo de 3 s, honeypot, límite de 5 correos cada 10 min por IP con **contador atómico** en base de datos (resiste envíos simultáneos; la IP se guarda como hash), IP real solo a través de proxies declarados (`ENCILUZ_TRUSTED_PROXIES`), validación de longitud y formato, bloqueo de saltos de línea (inyección de cabeceras), tamaño máximo de 40 KB, redirección POST→GET, página del formulario sin caché | `cms/mu-plugins/enciluz/contact.php` | `contact.sh`: 41 pruebas |
 | Protección de datos: el formulario **no guarda** mensajes ni datos personales; solo envía un correo al destinatario configurado | `contact.php` | `contact.sh`: «no guarda datos personales» |
 | Base de datos y panel no expuestos en local | Docker publica solo `127.0.0.1:8088` | `docker-compose.yml` |
 | Secretos fuera del repositorio | `cms/.env` y `CREDENCIALES-LOCAL.txt` ignorados por git; claves generadas aleatoriamente | `.gitignore` |
@@ -42,9 +42,8 @@ No se cargan scripts, fuentes, iframes ni analíticas de terceros. Las fuentes y
    cliente elige). Bloquearlos rompería la edición. El riesgo es bajo porque **los scripts sí están restringidos**
    (nonce por petición en WordPress y hashes en la vista previa), y la inyección de estilos no ejecuta código.
 2. **En el panel (`/wp-admin/`) no se aplica la CSP estricta**, porque el editor de WordPress la necesita más
-   permisiva. Mitigación: login oculto, 2FA, límite de intentos y cuentas con el mínimo rol necesario.
-3. **El límite de envíos del formulario usa transients de WordPress**: si una red distribuye el ataque entre
-   muchas IP, el límite por IP no basta. Mitigación: honeypot, token con tiempo mínimo y nonce. Como mejora
+   permisiva. En el sitio público sí se aplica a todos, con o sin sesión. Mitigación: login oculto, 2FA, límite de intentos y cuentas con el mínimo rol necesario.
+3. **El límite de envíos es por IP**: si una red distribuye el ataque entre muchas IP, el límite por IP no basta. Mitigación: honeypot, token con tiempo mínimo y nonce. Como mejora
    opcional se puede añadir un firewall de aplicación del hosting.
 4. **La vista previa en Vercel no procesa el formulario** (no tiene PHP): muestra un aviso con el correo y el
    WhatsApp. El sitio definitivo en GoDaddy sí lo procesa.
@@ -52,7 +51,7 @@ No se cargan scripts, fuentes, iframes ni analíticas de terceros. Las fuentes y
 ## 4. Cuentas y roles
 
 - `enciluz-admin` (Administrador): solo para el equipo técnico. 2FA obligatorio.
-- `cliente` (Editor): la fundación edita páginas, imágenes y menús. No puede instalar plugins, cambiar temas,
+- `cliente` (Editor): la fundación edita páginas e imágenes (menús, cabecera y pie requieren la cuenta de administrador). No puede instalar plugins, cambiar temas,
   editar código ni publicar HTML sin filtrar. 2FA obligatorio.
 - El correo que recibe el formulario se cambia en **Ajustes → Generales** (lo edita el administrador).
 
@@ -60,9 +59,10 @@ No se cargan scripts, fuentes, iframes ni analíticas de terceros. Las fuentes y
 
 ```bash
 cd cms && docker compose up -d
-bash tests/security.sh     # 24 pruebas de endurecimiento
-bash tests/content.sh      # 45 pruebas de contenido
-bash tests/contact.sh      # 29 pruebas del formulario
+bash tests/security.sh     # 32 pruebas de endurecimiento
+bash tests/content.sh      # 54 pruebas de contenido
+bash tests/contact.sh      # 41 pruebas del formulario
+(cd tests/browser && npm i && npm run mobile && npm run editor)   # diseño móvil y validez de bloques
 python3 scripts/export.py  # exporta y verifica la vista previa
 ```
 
