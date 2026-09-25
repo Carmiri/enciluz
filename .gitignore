@@ -5,5 +5,4 @@ node_modules/
 .vercel/
 cms/data/
 .superpowers/
-preview/**/
-!preview/vercel.json
+preview/
