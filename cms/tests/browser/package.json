@@ -1,0 +1,11 @@
+{
+  "name": "enciluz-browser-tests",
+  "private": true,
+  "type": "module",
+  "description": "Pruebas en Chrome: diseño móvil (360/390/768 px) y validez de bloques en el editor.",
+  "scripts": {
+    "mobile": "node mobile.mjs",
+    "editor": "node editor-blocks.mjs \"$(cd ../.. && docker compose run --rm --no-deps -T cli wp post list --post_type=page --fields=post_name,ID --format=json 2>/dev/null | python3 -c 'import json,sys;print(json.dumps({p[\"post_name\"]:p[\"ID\"] for p in json.load(sys.stdin)}))')\""
+  },
+  "dependencies": { "puppeteer-core": "^24.0.0" }
+}

@@ -6,7 +6,7 @@
  * Block Types: core/template-part/footer
  * Inserter: no
  */
-$col1 = enciluz_img(enciluz_theme_asset('images/logo-mark.png'), 'Fundación Enciende una Luz', 0, 'enciluz-footer__logo')
+$col1 = enciluz_img(enciluz_theme_asset('images/logo-mark.png'), '', 0, 'enciluz-footer__logo')
 	. enciluz_p('Fundación de Bienestar Social Enciende una Luz. Protegemos y acompañamos a niñas, niños, adolescentes, mujeres y familias en Venezuela desde 2008.');
 $col2 = enciluz_h('Explora') . enciluz_link_list([
 	['Quiénes somos', '/quienes-somos/'],

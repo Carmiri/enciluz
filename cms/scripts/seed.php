@@ -92,7 +92,7 @@ function enciluz_seed_page(string $slug, string $title, string $content, bool $f
 
 $programs = [];
 foreach ($c['programs'] as $p) {
-	$programs[$p['slug']] = $p + ['image' => $img[$p['slug']]['url'], 'image_id' => $img[$p['slug']]['id']];
+	$programs[$p['slug']] = $p + ['image' => $img[$p['slug']]['url'], 'image_id' => $img[$p['slug']]['id'], 'alt' => $img[$p['slug']]['alt']];
 }
 $stats   = array_map(static fn($x) => [$x['value'], $x['label']], $s['stats']);
 $sectors = array_map(static fn($x) => [$x['icon'], $x['title'], $x['summary']], $c['sectors']);
@@ -120,7 +120,7 @@ $home = enciluz_section_hero([
 	'image'    => $img['hero']['url'],
 	'image_id' => $img['hero']['id'],
 	'alt'      => $img['hero']['alt'],
-	'buttons'  => [['Conoce lo que hacemos', '/que-hacemos/'], ['Colabora', '/contacto/#colabora', 'outline']],
+	'buttons'  => [['Ver nuestros programas', '/que-hacemos/'], ['Dona o colabora', '/contacto/#colabora', 'outline']],
 ])
 	. enciluz_section_stats($stats)
 	. enciluz_section_sectors($sectors, 'Cómo acompañamos a las comunidades', $s['identity'])
@@ -165,7 +165,8 @@ foreach ($c['documents'] as $d) {
 $t     = $c['transparency'];
 $trans = enciluz_section_intro('Transparencia', $t['intro'])
 	. enciluz_section_text('Datos legales', ["Fundación de Bienestar Social Enciende una Luz (ENCILUZ). RIF {$s['rif']}.", $s['registry']])
-	. enciluz_section_documents($docs, 'Protocolos, manuales y códigos', 'Documentos que orientan nuestra gestión. Si necesitas consultar alguno, solicítalo por nuestro formulario de contacto.')
+	. enciluz_section_documents($docs, 'Protocolos, manuales y códigos', 'Documentos que orientan nuestra gestión. Donantes, aliados y auditores pueden solicitar cualquiera de ellos.')
+	. enciluz_group(enciluz_buttons([['Solicitar un documento', 'mailto:fundacionenciluz@gmail.com?subject=' . rawurlencode('Solicitud de documento de transparencia'), 'oscuro']]), ['align' => 'full', 'class' => 'enciluz-seccion enciluz-seccion--pegada'])
 	. enciluz_section_text('Prevención de la explotación y el abuso sexual (PEAS)', [$t['peas']], 'celeste', 'peas')
 	. enciluz_group(
 		enciluz_h('Canal de denuncias') . enciluz_p($t['complaints']) . enciluz_buttons([['Hacer una denuncia confidencial', '/contacto/?motivo=denuncia#formulario', 'oscuro']]),

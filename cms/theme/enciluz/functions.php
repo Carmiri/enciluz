@@ -28,3 +28,20 @@ add_action('init', static function (): void {
 
 // Sin patrones remotos del directorio de WordPress (menos peticiones externas).
 add_filter('should_load_remote_block_patterns', '__return_false');
+
+// Sin script de emojis: JS innecesario y bloqueado por la CSP.
+remove_action('wp_head', 'print_emoji_detection_script', 7);
+remove_action('wp_print_styles', 'print_emoji_styles');
+add_filter('emoji_svg_url', '__return_false');
+
+// Meta descripción: usa el «Extracto» de cada página (editable en el panel lateral del editor).
+add_action('wp_head', static function (): void {
+	$id = is_front_page() ? (int) get_option('page_on_front') : (is_singular() ? get_queried_object_id() : 0);
+	$text = $id ? trim((string) get_post_field('post_excerpt', $id)) : '';
+	if ('' === $text) {
+		$text = (string) get_bloginfo('description');
+	}
+	printf("<meta name=\"description\" content=\"%s\">\n", esc_attr(wp_trim_words($text, 30, '…')));
+}, 1);
+
+add_action('init', static fn() => add_post_type_support('page', 'excerpt'));

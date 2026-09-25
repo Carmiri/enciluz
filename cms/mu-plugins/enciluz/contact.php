@@ -8,6 +8,7 @@ defined('ABSPATH') || exit;
 
 const ENCILUZ_CONTACT_REASONS = [
 	'informacion'  => 'Información',
+	'cooperacion'  => 'Donación económica o cooperación',
 	'voluntariado' => 'Voluntariado',
 	'alianza'      => 'Alianza institucional',
 	'donacion'     => 'Donación en especie',
@@ -89,12 +90,13 @@ function enciluz_contact_validate(array $in): array {
 	return [['nombre' => sanitize_text_field($name), 'correo' => sanitize_email($email), 'motivo' => $reason, 'mensaje' => sanitize_textarea_field($message)], null];
 }
 
+// Parámetro «aviso» (no «error», que es una variable reservada de WordPress).
 // Procesa el envío (patrón POST → redirección → GET) antes de pintar la página.
 add_action('template_redirect', static function (): void {
 	if ('POST' !== ($_SERVER['REQUEST_METHOD'] ?? '') || empty($_POST['enciluz_contact'])) {
 		return;
 	}
-	$back = remove_query_arg(['enviado', 'error'], wp_get_referer() ?: get_permalink() ?: home_url('/contacto/'));
+	$back = remove_query_arg(['enviado', 'aviso'], wp_get_referer() ?: get_permalink() ?: home_url('/contacto/'));
 	$back = wp_validate_redirect($back, home_url('/contacto/'));
 	$go   = static function (array $args) use ($back): void {
 		wp_safe_redirect(add_query_arg($args, $back) . '#formulario', 303);
@@ -102,21 +104,21 @@ add_action('template_redirect', static function (): void {
 	};
 
 	if ((int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 10000) {
-		$go(['error' => 'mensaje']);
+		$go(['aviso' => 'mensaje']);
 	}
 	if (!enciluz_contact_rate_ok()) {
-		$go(['error' => 'limite']);
+		$go(['aviso' => 'limite']);
 	}
 	[$data, $error] = enciluz_contact_validate($_POST);
 	if ($error) {
-		$go(['error' => $error]);
+		$go(['aviso' => $error]);
 	}
 
 	$reason  = ENCILUZ_CONTACT_REASONS[$data['motivo']];
 	$subject = sprintf('[Web ENCILUZ] %s — %s', $reason, $data['nombre']);
 	$body    = "Nombre: {$data['nombre']}\nCorreo: {$data['correo']}\nMotivo: {$reason}\n\n{$data['mensaje']}\n";
 	$sent    = wp_mail(enciluz_contact_to(), $subject, $body, ['Reply-To: ' . $data['correo']]);
-	$go($sent ? ['enviado' => '1'] : ['error' => 'envio']);
+	$go($sent ? ['enviado' => '1'] : ['aviso' => 'envio']);
 });
 
 /** HTML del formulario. */
@@ -134,10 +136,14 @@ function enciluz_contact_render(): string {
 	$notice = '';
 	if (isset($_GET['enviado'])) {
 		$notice = '<p class="enciluz-aviso enciluz-aviso--ok" role="status">Mensaje enviado. Te responderemos a tu correo lo antes posible.</p>';
-	} elseif (isset($_GET['error'])) {
-		$code   = sanitize_key((string) $_GET['error']);
-		$notice = '<p class="enciluz-aviso enciluz-aviso--error" role="alert">' . esc_html($errors[$code] ?? $errors['datos']) . '</p>';
+	} elseif (isset($_GET['aviso'])) {
+		$code   = sanitize_key((string) $_GET['aviso']);
+		$notice = '<p id="enciluz-error" class="enciluz-aviso enciluz-aviso--error" role="alert">' . esc_html($errors[$code] ?? $errors['datos']) . '</p>';
 	}
+	$invalid = isset($_GET['aviso']) ? sanitize_key((string) $_GET['aviso']) : '';
+	// Marca el campo con error y lo asocia al mensaje (lectores de pantalla).
+	$aria = static fn(string $field): string => $invalid === $field ? ' aria-invalid="true" aria-describedby="enciluz-error"' : '';
+	$req  = ' <span class="enciluz-req">(obligatorio)</span>';
 	$selected = isset($_GET['motivo']) ? sanitize_key((string) $_GET['motivo']) : 'informacion';
 	$options  = '';
 	foreach (ENCILUZ_CONTACT_REASONS as $value => $label) {
@@ -152,20 +158,20 @@ function enciluz_contact_render(): string {
 		<input type="hidden" name="enciluz_t" value="<?php echo esc_attr(enciluz_contact_token(time())); ?>">
 		<?php wp_nonce_field('enciluz_contact', '_wpnonce', false); ?>
 		<div>
-			<label for="enciluz-nombre">Nombre</label>
-			<input id="enciluz-nombre" name="nombre" type="text" autocomplete="name" required minlength="2" maxlength="100">
+			<label for="enciluz-nombre">Nombre<?php echo $req; // phpcs:ignore ?></label>
+			<input id="enciluz-nombre"<?php echo $aria('nombre'); // phpcs:ignore ?> name="nombre" type="text" autocomplete="name" required minlength="2" maxlength="100">
 		</div>
 		<div>
-			<label for="enciluz-correo">Correo electrónico</label>
-			<input id="enciluz-correo" name="correo" type="email" autocomplete="email" required maxlength="150">
+			<label for="enciluz-correo">Correo electrónico<?php echo $req; // phpcs:ignore ?></label>
+			<input id="enciluz-correo"<?php echo $aria('correo'); // phpcs:ignore ?> name="correo" type="email" autocomplete="email" required maxlength="150">
 		</div>
 		<div>
-			<label for="enciluz-motivo">Motivo</label>
-			<select id="enciluz-motivo" name="motivo" required><?php echo $options; // phpcs:ignore -- escapado arriba ?></select>
+			<label for="enciluz-motivo">Motivo<?php echo $req; // phpcs:ignore ?></label>
+			<select id="enciluz-motivo"<?php echo $aria('motivo'); // phpcs:ignore ?> name="motivo" required><?php echo $options; // phpcs:ignore -- escapado arriba ?></select>
 		</div>
 		<div>
-			<label for="enciluz-mensaje">Mensaje</label>
-			<textarea id="enciluz-mensaje" name="mensaje" required minlength="5" maxlength="3000"></textarea>
+			<label for="enciluz-mensaje">Mensaje<?php echo $req; // phpcs:ignore ?></label>
+			<textarea id="enciluz-mensaje"<?php echo $aria('mensaje'); // phpcs:ignore ?> name="mensaje" required minlength="5" maxlength="3000"></textarea>
 		</div>
 		<div class="enciluz-hp" aria-hidden="true">
 			<label for="enciluz-website">No completes este campo</label>

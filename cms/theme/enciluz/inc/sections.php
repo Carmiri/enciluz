@@ -65,7 +65,7 @@ if (!function_exists('enciluz_section_hero')) {
 
 	/** Una tarjeta de programa. $p: slug, title, summary, image, image_id, states[], highlight, link */
 	function enciluz_program_card(array $p): string {
-		$inner = enciluz_img($p['image'], '', (int) ($p['image_id'] ?? 0), 'is-style-arco');
+		$inner = enciluz_img($p['image'], $p['alt'] ?? '', (int) ($p['image_id'] ?? 0), 'is-style-arco');
 		$inner .= enciluz_h($p['title'], 3);
 		if (!empty($p['highlight'])) {
 			$inner .= enciluz_p($p['highlight'], 'enciluz-destacado');
@@ -105,7 +105,7 @@ if (!function_exists('enciluz_section_hero')) {
 		if (!empty($p['states'])) {
 			$text .= enciluz_p('Dónde: ' . implode(', ', $p['states']), 'enciluz-estados');
 		}
-		$img  = enciluz_img($p['image'], '', (int) ($p['image_id'] ?? 0), 'is-style-arco');
+		$img  = enciluz_img($p['image'], $p['alt'] ?? '', (int) ($p['image_id'] ?? 0), 'is-style-arco');
 		$cols = $flip ? [[$text, '58%'], [$img, '42%']] : [[$img, '42%'], [$text, '58%']];
 		return enciluz_group(enciluz_columns($cols, 'are-vertically-centered', 'wide'), ['class' => 'enciluz-programa-detalle', 'anchor' => $p['slug'] ?? '']);
 	}

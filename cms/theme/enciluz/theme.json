@@ -32,7 +32,7 @@
 				{ "slug": "30", "name": "S", "size": "1rem" },
 				{ "slug": "40", "name": "M", "size": "clamp(1.25rem, 2.5vw, 2rem)" },
 				{ "slug": "50", "name": "L", "size": "clamp(2rem, 5vw, 3.5rem)" },
-				{ "slug": "60", "name": "XL", "size": "clamp(3rem, 8vw, 6rem)" }
+				{ "slug": "60", "name": "XL", "size": "clamp(2.5rem, 6vw, 4.5rem)" }
 			]
 		},
 		"typography": {
@@ -53,8 +53,8 @@
 				}
 			],
 			"fontSizes": [
-				{ "slug": "small", "name": "Pequeño", "size": "0.95rem" },
-				{ "slug": "medium", "name": "Normal", "size": "1.15rem" },
+				{ "slug": "small", "name": "Pequeño", "size": "1rem", "fluid": false },
+				{ "slug": "medium", "name": "Normal", "size": "1.125rem", "fluid": false },
 				{ "slug": "large", "name": "Grande", "size": "1.4rem", "fluid": { "min": "1.25rem", "max": "1.4rem" } },
 				{ "slug": "x-large", "name": "Muy grande", "size": "2.1rem", "fluid": { "min": "1.6rem", "max": "2.1rem" } },
 				{ "slug": "xx-large", "name": "Titular", "size": "3.4rem", "fluid": { "min": "2.2rem", "max": "3.4rem" } }
